@@ -7,6 +7,10 @@ import { TABLE_HELPERS, ExampleDatabase, ExampleDataSource } from './helpers.dat
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Entree } from '../../model/entree';
+import { EntreeService } from '../../services/entree.service';
+import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'cdk-feature-table',
@@ -14,28 +18,26 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrls: ['./feature-table.component.scss']
 })
 export class FeatureTableComponent implements OnInit {
-
+	LisData;
 	showNavListCode;
-	displayedColumns = ['select', 'userId', 'userName', 'progress', 'color'];
+	displayedColumns: string[] = ['select', 'id', 'nomEntree', 'quantiteEntree','actions'];
 	exampleDatabase = new ExampleDatabase();
 	selection = new SelectionModel<string>(true, []);
 	dataSource: ExampleDataSource | null;
 	allfeatures = TABLE_HELPERS;
-	constructor() { }
+	entrees:Entree[] | undefined;
+	constructor(private entreeService:EntreeService) { }
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	@ViewChild('filter', { static: true }) filter: ElementRef;
 
-	ngOnInit() {
-	    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
-	    observableFromEvent(this.filter.nativeElement, 'keyup').pipe(
-	        debounceTime(150),
-	        distinctUntilChanged(),)
-	        .subscribe(() => {
-	          if (!this.dataSource) { return; }
-	          this.dataSource.filter = this.filter.nativeElement.value;
-	        });
-	}
+	async ngOnInit() {
+	  this.entrees =  await this.entreeService.getAllEntree();
+	  this.LisData = new MatTableDataSource(this.entrees);
+	  this.LisData.sort = this.sort;
+      this.LisData.paginator = this.paginator;
+     
+}
 
 	isAllSelected(): boolean {
 	    if (!this.dataSource) { return false; }
@@ -59,5 +61,23 @@ export class FeatureTableComponent implements OnInit {
 	      this.exampleDatabase.data.forEach(data => this.selection.select(data.id));
 	    }
 	}
-
+/*	onDelet(element) {
+		let index = this.LisData.data.indexOf(element);
+		const dialogRef = this.deletDialog.open(DeleteConfirmationComponent,
+	
+		  { data: { message: "Are you want to delete  " + element.companyName + "?" } });
+		dialogRef.afterClosed().subscribe(result => {
+		  if (result == true) {
+			this.entreeService.deleteentre(element.id).subscribe(async (data) => {
+			this.entrees = await this.entreeService.getAllEntree();
+			this.LisData = new MatTableDataSource(this.entrees);
+			this.LisData.sort = this.sort;
+			this.LisData.paginator = this.paginator;
+			});
+			
+		  }
+		});
+	
+	  }*/
+	  
 }

@@ -3,9 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { FixedTableComponent } from './fixed-table/fixed-table.component';
 import { FeatureTableComponent } from './feature-table/feature-table.component';
 import { ResponsiveTableComponent } from './responsive-table/responsive-table.component';
+import { EntreeComponent } from '../entree/entree/entree.component';
 
 const materialWidgetRoutes: Routes = [
   	{ path: 'fixed', component: FixedTableComponent , data: { animation: 'fixed' }},
+    { path: 'entree', component: EntreeComponent , data: { animation: 'fixed' }},
   	{ path: 'featured', component: FeatureTableComponent ,data: { animation: 'featured' }},
   	{ path: 'responsive', component: ResponsiveTableComponent ,data: { animation: 'responsive' }}
 ];

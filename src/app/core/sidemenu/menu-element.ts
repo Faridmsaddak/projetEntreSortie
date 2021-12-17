@@ -178,7 +178,7 @@ export const menus = [
                 'open': false,
             },
             {
-                'name': 'Feature',
+                'name': 'Liste Entrées',
                 'icon': 'done_all',
                 'link': 'tables/featured',
                 'open': false,
